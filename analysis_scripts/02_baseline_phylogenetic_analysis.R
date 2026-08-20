@@ -1,3 +1,18 @@
+################################################################################
+### Constructing a baseline phylogenetic tree for LUNAR and Usual Care
+# Contents:
+# 1) Settings
+# 2) Loading metadata and IQ tree file
+# 3) Function to add LINEAGE + Persistent data to base tree
+# 4) Circular (fan) tree
+# 5) Vertical (rectangular) tree [Figure 11]
+
+## Includes figures:
+# 1) Figure 11. Baseline phylogenetic tree for a subset of both cohorts (n = 69)
+
+
+
+# Load packages 
 library(ape)
 library(ggplot2)
 library(ggtree)
@@ -133,7 +148,8 @@ ggsave(plot = p_circular, filename = output_circular, height = 10, width = 12, d
 cat("Saved", output_circular, "\n")
 
 # ----------------------------------------------------------------------------
-# 5. Vertical (rectangular) version (FIGURE 11)
+# 5. Vertical (rectangular) version 
+# Figure 11. Baseline phylogenetic tree for a subset of both cohorts 
 # ----------------------------------------------------------------------------
 p_vertical_base <- ggtree(tree, size = 0.6, layout = "rectangular") +
   geom_tiplab(size = 3, align = FALSE, offset = tree_depth * 0.004) +  
