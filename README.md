@@ -86,7 +86,7 @@ Paths relating to local file locations, HPC environments, and input data may nee
 
 If using or referring to the analysis code contained in this repository, please cite the associated dissertation:
 
-**[Author name]. [Dissertation title]. [Institution]; [Year].**
+**[Prisha Yadav]. [Within-Host SARS-CoV-2 Evolution During Sotrovimab Treatment in Immunocompromised Patients: A Longitudinal Genomics Analysis of Viral Diversity, Selection, and Escape Mutations]. [University College London]; [2026].**
 
 ## Contact
 
