@@ -1,0 +1,24 @@
+# This file species the custom parameters used to process samples using viralrecon 
+
+# LUNAR.params.yml file
+platform: 'illumina'
+protocol: 'amplicon'
+gff: '/path/to/your/data/directory/LUNAR_PAN/wuhan.gff'
+fasta: '/path/to/your/data/directory/LUNAR_PAN/wuhan.fasta'
+primer_bed: '/path/to/your/data/directory/LUNAR_PAN/SARS-CoV-2.scheme.bed'
+
+
+skip_kraken2: true
+skip_asciigenome: true
+min_mapped_reads: 1000
+save_mpileup: true
+variant_caller: 'ivar' 
+consensus_caller: 'ivar'
+skip_assembly: true
+max_memory: '5.GB'
+max_cpus: 2
+
+# If you do not want a custom reference file, use these settings instead of fasta, gff and primer_bed:
+# primer_set: 'artic'                          
+# primer_set_version: 4.1
+# genome: 'MN908947.3'
