@@ -1,20 +1,33 @@
 ################################################################################
-######### Load the Data ########################################################
-################################################################################
+### Quality Control and Final Longitudinal Analysis Cohort Building 
+# Contents:
+# 1) Loading the data
+# 2) Formatting raw .csv files for analysis 
+# 3) Quality control 
+# 4) Combined cohort 1: LUNAR_UC_baseline_analysis_cohort
+# 5) Selecting patients for longitudinal cohort
+# 6) Combined cohort 2: LUNAR_UC_trajectory_analysis_cohort
+
+## Includes figures:
+# 1) Figure 8: Sampling timepoints for each LUNAR patient included in the final longitudinal analysis cohort
+# 2) Figure 9: Sampling timepoints for each Usual Care patient included in the final longitudinal analysis cohort
+# 3) Figure 10: Comparison between sequencing quality control metrics for LUNAR and Usual Care
+
+# Load packages
 library(tidyverse)
 library(patchwork)
+library(grid)
+
+
+################################################################################
+######### Load the Data ########################################################
+################################################################################
 
 UC <- read.csv("path/to/your/data/directory/UsualCare.csv")  # Loading variant long table 
 UC <- as_tibble(UC)
 
 LUNAR <- read.csv("path/to/your/data/directory/LUNAR_data.csv")  # Loading variant long table 
 LUNAR <- as_tibble(LUNAR)
-
-LUNAR_UC_trajectory_analysis_cohort <- read.csv("D:/MSc Dissertation R/LUNAR_UC_trajectory_analysis_cohort.csv")
-LUNAR_UC_trajectory_analysis_cohort <- as_tibble(LUNAR_UC_trajectory_analysis_cohort)
-
-LUNAR_UC_baseline <- read.csv("D:/MSc Dissertation R/LUNAR_UC_baseline.csv")
-LUNAR_UC_baseline <- as_tibble(LUNAR_UC_baseline)
 
 
 ################################################################################
@@ -87,7 +100,7 @@ UC_post_QC <- UC %>% filter(ALT_FREQ >= 0.05,
 ######### Combining Both Cohorts  ##############################################
 ################################################################################
 # 1. Convert LUNAR Names to characters
-# 2. Add a column identifying as immunocompromised and control for both cohorts
+# 2. Add a column identifying as LUNAR and Usual Care for both cohorts
 # 3. Combine the two cohorts (First extract exact columns from LUNAR and ensure they match)
 # 4. Output: 2 combined cohorts: For baseline and trajectory analysis 
 
@@ -238,3 +251,176 @@ LUNAR_UC_trajectory_analysis_cohort <- bind_rows(LUNAR_trajectory_analysis_cohor
 
 
 
+###########################################################################################################
+# 1) Figure 8: Sampling timepoints for each LUNAR patient included in the final longitudinal analysis cohort
+###########################################################################################################
+VCF <- read.csv("path/to/your/data/directory/LUNAR_data.csv")
+VCF_tib <- as_tibble(VCF)
+
+# --- 1. One row per unique sample ---
+sample_info <- VCF_tib %>%
+  select(Filter_Name, Filter_SendRef) %>%
+  distinct() %>%
+  mutate(present = TRUE)
+
+# --- 2. Define your 4 timepoints ---
+timepoint_levels <- c("BASELINE","DAY7","DAY14","DAY28")
+
+tp_colours <- c("#E69F00", "#56B4E9", "#009E73", "#CC79A7")
+names(tp_colours) <- timepoint_levels
+
+BASELINE <- timepoint_levels[1]  # adjust if your baseline isn't the first timepoint
+
+patients_to_keep <- sample_info %>%
+  filter(Filter_SendRef != BASELINE) %>%
+  group_by(Filter_Name) %>%
+  summarise(n_post_baseline = n_distinct(Filter_SendRef)) %>%
+  filter(n_post_baseline >= 2) %>%
+  pull(Filter_Name)
+
+all_combos_filtered <- all_combos %>%
+  filter(Filter_Name %in% patients_to_keep)
+
+# --- 3. Complete grid ---
+all_combos_filtered <- expand.grid(
+  Filter_Name    = unique(patients_to_keep),
+  Filter_SendRef = timepoint_levels,
+  stringsAsFactors = FALSE
+) %>%
+  left_join(sample_info, by = c("Filter_Name", "Filter_SendRef")) %>%
+  mutate(present = replace_na(present, FALSE))
+
+# --- 4. Plot ---
+ggplot(all_combos_filtered, aes(x = factor(Filter_SendRef, levels = timepoint_levels), 
+                       y = 10, 
+                       fill = ifelse(present, as.character(Filter_SendRef), NA))) +
+  geom_col(colour = "white", linewidth = 0.5) +
+  facet_wrap(~ Filter_Name, ncol = 10) +
+  scale_fill_manual(
+    values       = tp_colours,
+    na.value     = "grey90",
+    name         = "Timepoint",
+    na.translate = FALSE
+  ) +
+  scale_y_continuous(breaks = NULL) +
+  scale_x_discrete(labels = NULL) +
+  labs(x = NULL, y = NULL) +
+  theme_void(base_size = 9) +
+  theme(
+    strip.background = element_rect(fill = "black"),
+    strip.text       = element_text(colour = "white", face = "bold", size = 7,
+                                    margin = margin(3, 3, 3, 3)),
+    panel.border     = element_rect(colour = "black", fill = NA, linewidth = 1),
+    panel.background = element_rect(fill = "grey97"),
+    legend.position  = "right",
+    legend.title     = element_text(face = "bold", size = 16),
+    legend.text      = element_text(size = 14),
+    legend.key.size  = unit(1.2, "cm"),
+    plot.margin      = margin(10, 10, 10, 10),
+  )
+
+ggsave("patient_timepoint_grid_filtered.png", width = 14, height = 10, dpi = 300)
+
+
+###########################################################################################################
+# 2) Figure 9: Sampling timepoints for each Usual Care patient included in the final longitudinal analysis cohort
+###########################################################################################################
+collapse_tp <- function(x) {
+  case_when(
+    x %in% c("DAY4","DAY5","DAY6") ~ "DAY5 ±1",
+    TRUE                            ~ x
+  )
+}
+
+sample_info <- LUNAR_UC_trajectory_analysis_cohort %>%
+  filter(Cohort == "Usual Care") %>%
+  distinct(Filter_Name, Filter_SendRef) %>%
+  mutate(Filter_SendRef = collapse_tp(Filter_SendRef)) %>%
+  distinct() %>%                      # merges DAY4 + DAY5 in the same patient
+  mutate(present = TRUE)
+
+# add DAY1 as before
+day1_info <- UC_post_QC %>%
+  filter(Filter_Name %in% sample_info$Filter_Name,
+         Filter_SendRef == "DAY1") %>%
+  distinct(Filter_Name, Filter_SendRef) %>%
+  mutate(present = TRUE)
+
+sample_info <- bind_rows(sample_info, day1_info)
+
+timepoint_levels <- c("DAY1","DAY5 ±1","DAY14")
+tp_colours <- c("#E69F00","#56B4E9","#009E73")
+names(tp_colours) <- timepoint_levels
+
+
+# --- Complete grid ---
+all_combos <- expand.grid(
+  Filter_Name    = unique(sample_info$Filter_Name),
+  Filter_SendRef = timepoint_levels,
+  stringsAsFactors = FALSE
+) %>%
+  left_join(sample_info, by = c("Filter_Name", "Filter_SendRef")) %>%
+  mutate(present = replace_na(present, FALSE))
+
+# --- Plot ---
+ggplot(all_combos, aes(x = factor(Filter_SendRef, levels = timepoint_levels), 
+                       y = 10, 
+                       fill = ifelse(present, as.character(Filter_SendRef), NA))) +
+  geom_col(colour = "white", linewidth = 0.5) +
+  facet_wrap(~ Filter_Name, ncol = 7) +
+  scale_fill_manual(
+    values       = tp_colours,
+    na.value     = "grey90",
+    name         = "Timepoint",
+    na.translate = FALSE
+  ) +
+  scale_y_continuous(breaks = NULL) +
+  scale_x_discrete(labels = NULL) +
+  labs(x = NULL, y = NULL) +
+  theme_void(base_size = 9) +
+  theme(
+    strip.background = element_rect(fill = "black"),
+    strip.text       = element_text(colour = "white", face = "bold", size = 20,
+                                    margin = margin(3, 3, 3, 3)),
+    panel.border     = element_rect(colour = "black", fill = NA, linewidth = 1),
+    panel.background = element_rect(fill = "grey97"),
+    legend.position  = "right",
+    legend.title     = element_text(face = "bold", size = 16),
+    legend.text      = element_text(size = 14),
+    legend.key.size  = unit(1.2, "cm"),
+    plot.margin      = margin(10, 10, 10, 10),
+  )
+
+ggsave("patient_timepoint_grid_new.png", width = 14, height = 10, dpi = 300)
+
+
+
+
+###########################################################################################################
+# 3) Figure 10: Comparison between sequencing quality control metrics for LUNAR and Usual Care
+###########################################################################################################
+sample_qc <- LUNAR_UC_trajectory_analysis_cohort %>%
+  distinct(
+    Cohort,
+    Filter_Name,
+    Filter_SendRef,
+    Coverage_median,
+    Pct_Mapped_reads,
+    Pct_Coverage_gt_10x
+  )
+
+
+qc_long <- sample_qc %>%
+  select(Cohort, Coverage_median,
+         Pct_Mapped_reads,
+         Pct_Coverage_gt_10x) %>%
+  pivot_longer(-Cohort,
+               names_to = 'Metric',
+               values_to = 'Value')
+
+ggplot(qc_long, aes(Cohort, Value)) +
+  geom_boxplot(outlier.shape = NA, width = 0.6) +
+  geom_jitter(width = 0.15, alpha = 0.4, size = 1) +
+  facet_wrap(~Metric, scales = 'free_y', nrow = 1) +
+  theme_classic() +
+  labs(x = NULL, y = NULL)
