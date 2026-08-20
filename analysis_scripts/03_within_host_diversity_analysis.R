@@ -5,6 +5,14 @@
 # 2) Per-site nucleotide diversity (π site) (LUNAR only)
 # 3) Gene-specific nuceleotide diversity (π gene) (LUNAR only)
 
+## Includes figures:
+# 1) Figure 13: Comparison of variant burden (number of variants per sample per timepoint) in LUNAR and Usual Care after sotrovimab/standard-of-care administration
+# 2) Figure 14: Proportional distribution of variants across genes at Day 14 in LUNAR and Usual Care
+# 3) Figure 15: Within-host per-site nucleotide diversity (πsite) trajectory for each patient in the final LUNAR cohort
+# 4) Figure 16: Gene-specific nucleotide diversity for patients in the final LUNAR cohort
+
+
+
 # Load packages 
 library(tidyverse)
 library(RColorBrewer)
@@ -57,7 +65,7 @@ wilcox.test(n_variants ~ Cohort,
             data = Day14_p_data,
             exact = FALSE)
 
-######## Mutation burden per sample per timepoint: Trajectory Plot (Figure 13) #########
+######## Figure 13. Comparison of variant burden (number of variants per sample per timepoint) in LUNAR and Usual Care  #########
 ggplot() +
   # Individual patient trajectories
   geom_line(
@@ -105,7 +113,7 @@ ggplot() +
     subtitle = "Thick coloured lines show the cohort median"
   )
 
-########### Distribution of variants across SARS-CoV-2 genes (Day 14) (Figure 14) #################
+########### Figure 14. Proportional distribution of variants across genes at Day 14 in LUNAR and Usual Care #################
 cohort_gene_counts <- LUNAR_UC_trajectory_analysis_cohort %>% filter(Filter_SendRef == "DAY14") %>%
   group_by(Cohort, GENE_f) %>%
   summarise(
@@ -185,7 +193,7 @@ pi_sample <- pi_sample %>%
   )
 
 
-#### Trajectory Plot (Figure 15)
+########### Figure 15. Within-host per-site nucleotide diversity (πsite) trajectory for each patient in the final LUNAR cohort ##############
 pi_sample <- pi_sample %>%
   mutate(
     Filter_SendRef = factor(
@@ -324,7 +332,7 @@ gene_time_pi <- gene_time_pi %>%
   )
 
 
-# Heatmap of gene-specific nucleotide diversity trajectory (Figure 16)
+################ Figure 16: Gene-specific nucleotide diversity for patients in the final LUNAR cohort ##########################
 ggplot(
   gene_time_pi,
   aes(
