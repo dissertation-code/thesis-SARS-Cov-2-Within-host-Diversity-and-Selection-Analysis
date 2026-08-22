@@ -8,7 +8,7 @@
 # 5) Vertical (rectangular) tree [Figure 11]
 
 ## Includes figures:
-# 1) Figure 11. Baseline phylogenetic tree for a subset of both cohorts (n = 69)
+# 1) Figure 12. Baseline phylogenetic tree for a subset of both cohorts (n = 69)
 
 
 
@@ -150,7 +150,7 @@ cat("Saved", output_circular, "\n")
 
 # ----------------------------------------------------------------------------
 # 5. Vertical (rectangular) version 
-# Figure 11. Baseline phylogenetic tree for a subset of both cohorts 
+# Figure 12. Baseline phylogenetic tree for a subset of both cohorts 
 # ----------------------------------------------------------------------------
 p_vertical_base <- ggtree(tree, size = 0.6, layout = "rectangular") +
   geom_tiplab(size = 3, align = FALSE, offset = tree_depth * 0.004) +  
