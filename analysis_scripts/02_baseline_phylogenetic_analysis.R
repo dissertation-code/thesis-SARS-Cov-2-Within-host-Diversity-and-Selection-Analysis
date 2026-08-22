@@ -19,6 +19,7 @@ library(ggtree)
 library(treeio)
 library(tibble)
 library(ggnewscale)
+library(phangorn)
 
 # ----------------------------------------------------------------------------
 # 0. Settings 
