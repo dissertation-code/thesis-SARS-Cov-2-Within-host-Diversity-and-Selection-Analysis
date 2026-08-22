@@ -133,7 +133,7 @@ add_annotation_rings <- function(base_tree_plot, ring_width, ring_offset_step) {
 # ----------------------------------------------------------------------------
 # 4. Circular (fan) version
 # ----------------------------------------------------------------------------
-p_circular_base <- ggtree(td, size = 0.6, layout = "fan", open.angle = 10) +
+p_circular_base <- ggtree(tree, size = 0.6, layout = "fan", open.angle = 10) +
   geom_treescale(x = 0, y = -1) +
   support_layers
 
