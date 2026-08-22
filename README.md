@@ -29,7 +29,7 @@ The repository includes the upstream `viralrecon` configuration and execution sc
 Contains the configuration and execution files used for the `nf-core/viralrecon` workflow:
 
 * `viralrecon_parameters.yml` — workflow parameters used for the viralrecon analysis.
-* `viralrecon_config.yml` — configuration settings used during workflow execution.
+* `viralrecon_config.yml` — configuration settings used during variant calling using iVar in the viralrecon workflow.
 * `run_viralrecon.sh` — Bash script used to submit and execute the viralrecon workflow on the HPC environment.
 
 ### `scripts/`
@@ -37,7 +37,7 @@ Contains the configuration and execution files used for the `nf-core/viralrecon`
 Contains the R scripts used for downstream analysis. The scripts are numbered according to the general order of the analytical workflow:
 
 1. **`01_QC_and_analysis_cohort_building.R`**
-   Quality control and construction of the analysis cohort.
+   Quality control and construction of the longitudinal analysis cohort.
 
 2. **`02_baseline_phylogenetic_analysis.R`**
    Phylogenetic analysis of baseline samples.
@@ -56,7 +56,7 @@ Contains the R scripts used for downstream analysis. The scripts are numbered ac
 
 The underlying sequencing and clinical/sample-level data used in this study are **confidential and are therefore not included in this repository**.
 
-The data dictionary describing the variables used in the analysis is provided in the **Supplementary Information of the dissertation**.
+The data dictionary describing the variables used in the analysis is provided in the **Appendices (Appendix C) of the dissertation**.
 
 Consequently, the scripts in this repository document the computational and statistical analyses performed for the dissertation but cannot be executed from the repository alone without access to the corresponding input data.
 
@@ -82,11 +82,6 @@ Because the underlying data are confidential and are not distributed with this r
 Paths relating to local file locations, HPC environments, and input data may need to be modified before running the scripts in another environment.
 
 
-## Citation
-
-If using or referring to the analysis code contained in this repository, please cite the associated dissertation:
-
-**[Prisha Yadav]. [Within-Host SARS-CoV-2 Evolution During Sotrovimab Treatment in Immunocompromised Patients: A Longitudinal Genomics Analysis of Viral Diversity, Selection, and Escape Mutations]. [University College London]; [2026].**
 
 ## Contact
 
