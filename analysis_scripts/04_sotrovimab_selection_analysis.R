@@ -6,14 +6,14 @@
 # 3) Non-escape mutations 
 
 ## Includes figures:
-# 1) Figure 17: Allele frequency trajectories of well-documented sotrovimab escape mutations found in the LUNAR cohort, as specified by the COG-UK database
-# 2) Figure 18: Allele frequency trajectories of novel sotrovimab escape mutations occurring in the LUNAR cohort, at common escape genomic positions
-# 3) Figure 19: Recurrent well-documented sotrovimab escape mutations across patients in the LUNAR cohort
-# 4) Figure 20: Recurrent novel sotrovimab escape mutations occurring in the LUNAR cohort, at common escape genomic positions
-# 5) Figure 21: Recurrent non-escape mutations occurring in the LUNAR cohort
-# 6) Figure 22: Consensus crossing events in well-documented sotrovimab escape mutations
-# 7) Figure 23: Consensus crossing events in novel/potential sotrovimab escape mutations
-# 8) Figure 24: Consensus crossing events in non-escape mutations
+# 1) Figure 18: Allele frequency trajectories of well-documented sotrovimab escape mutations found in the LUNAR cohort, as specified by the COG-UK database
+# 2) Figure 19: Allele frequency trajectories of novel sotrovimab escape mutations occurring in the LUNAR cohort, at common escape genomic positions
+# 3) Figure 20: Recurrent well-documented sotrovimab escape mutations across patients in the LUNAR cohort
+# 4) Figure 21: Recurrent novel sotrovimab escape mutations occurring in the LUNAR cohort, at common escape genomic positions
+# 5) Figure 22: Recurrent non-escape mutations occurring in the LUNAR cohort
+# 6) Figure 23: Consensus crossing events in well-documented sotrovimab escape mutations
+# 7) Figure 24: Consensus crossing events in novel/potential sotrovimab escape mutations
+# 8) Figure 25: Consensus crossing events in non-escape mutations
 
 # This analysis is conducted on LUNAR data only, since no escape mutations were detected in Usual Care
 
@@ -100,7 +100,7 @@ variant_summary <- sotrovimab_mutations %>%
   arrange(desc(n))
 
 
-######### Figure 17: Allele frequency trajectories of well-documented sotrovimab escape mutations found in the LUNAR cohort ##############
+######### Figure 18: Allele frequency trajectories of well-documented sotrovimab escape mutations found in the LUNAR cohort ##############
 epitope_cols <- c("Epitope" = "#F4A582", "Non-epitope" = "#D9D9D9")
 
 sotrovimab_mutations %>%
@@ -141,7 +141,7 @@ sotrovimab_mutations %>%
 
 
 ############## Recurrent Sotrovimab Escape Mutations #################################
-########### Figure 19: Recurrent well-documented sotrovimab escape mutations across patients in the LUNAR cohort ##########
+########### Figure 20: Recurrent well-documented sotrovimab escape mutations across patients in the LUNAR cohort ##########
 ggplot(
   sotrovimab_mutations %>% distinct(Filter_Name, GENE_f, AA_change_f) %>%   # one occurrence per patient
     count(GENE_f, AA_change_f, name = "n_patients") %>%
@@ -225,7 +225,7 @@ sot_fixation_counts <- sot_fixation_table %>%
     )
   )
 
-################ Figure 22: Consensus crossing events in well-documented sotrovimab escape mutations ###############
+################ Figure 23: Consensus crossing events in well-documented sotrovimab escape mutations ###############
 p1 <- ggplot(
   sot_fixation_counts,
   aes(
@@ -341,7 +341,7 @@ novel_variant_summary
 
 
 
-########### Figure 18: Allele frequency trajectories of novel sotrovimab escape mutations occurring in the LUNAR cohort ############################
+########### Figure 19: Allele frequency trajectories of novel sotrovimab escape mutations occurring in the LUNAR cohort ############################
 epitope_cols <- c("Epitope" = "#F4A582", "Non-epitope" = "#D9D9D9")
 
 novel_sotrovimab_mutations %>%
@@ -382,7 +382,7 @@ novel_sotrovimab_mutations %>%
 
 
 ############# Novel/Potential Escape Mutations Recurrence ###########################
-########## Figure 20: Recurrent novel sotrovimab escape mutations occurring in the LUNAR cohort, at common escape genomic positions ################
+########## Figure 21: Recurrent novel sotrovimab escape mutations occurring in the LUNAR cohort, at common escape genomic positions ################
 ggplot(
   novel_sotrovimab_mutations %>% distinct(Filter_Name, GENE_f, AA_change_f) %>%   # one occurrence per patient
     count(GENE_f, AA_change_f, name = "n_patients") %>%
@@ -466,7 +466,7 @@ novel_sot_fixation_counts <- novel_sot_fixation_table %>%
     )
   )
 
-################ Figure 23: Consensus crossing events in novel/potential sotrovimab escape mutations ######################################
+################ Figure 24: Consensus crossing events in novel/potential sotrovimab escape mutations ######################################
 p1 <- ggplot(
   novel_sot_fixation_counts,
   aes(
@@ -521,7 +521,7 @@ non_sotrovimab_mutations <- cohort %>% filter(
 
 
 ############### Recurrent Non-escape Mutations #######################################
-######## Figure 21: Recurrent non-escape mutations occurring in the LUNAR cohort ##########
+######## Figure 22: Recurrent non-escape mutations occurring in the LUNAR cohort ##########
 ggplot(
   non_sotrovimab_mutations %>% distinct(Filter_Name, GENE_f, AA_change_f) %>%   # one occurrence per patient
     count(GENE_f, AA_change_f, name = "n_patients") %>%
@@ -596,7 +596,7 @@ non_sot_fixation_counts <- non_sot_fixation_table %>%
     )
   )
 
-############### Figure 24: Consensus crossing events in non-escape mutations ##############################
+############### Figure 25: Consensus crossing events in non-escape mutations ##############################
 p3 <- ggplot(
   non_sot_fixation_counts,
   aes(
