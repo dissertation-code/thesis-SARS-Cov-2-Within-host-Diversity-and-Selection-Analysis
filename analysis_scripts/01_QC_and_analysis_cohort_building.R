@@ -9,9 +9,9 @@
 # 6) Combined cohort 2: LUNAR_UC_trajectory_analysis_cohort
 
 ## Includes figures:
-# 1) Figure 8: Sampling timepoints for each LUNAR patient included in the final longitudinal analysis cohort
-# 2) Figure 9: Sampling timepoints for each Usual Care patient included in the final longitudinal analysis cohort
-# 3) Figure 10: Comparison between sequencing quality control metrics for LUNAR and Usual Care
+# 1) Figure 9: Sampling timepoints for each LUNAR patient included in the final longitudinal analysis cohort
+# 2) Figure 10: Sampling timepoints for each Usual Care patient included in the final longitudinal analysis cohort
+# 3) Figure 11: Comparison between sequencing quality control metrics for LUNAR and Usual Care
 
 # Load packages
 library(tidyverse)
@@ -252,7 +252,7 @@ LUNAR_UC_trajectory_analysis_cohort <- bind_rows(LUNAR_trajectory_analysis_cohor
 
 
 ###########################################################################################################
-# 1) Figure 8: Sampling timepoints for each LUNAR patient included in the final longitudinal analysis cohort
+# 1) Figure 9: Sampling timepoints for each LUNAR patient included in the final longitudinal analysis cohort
 ###########################################################################################################
 VCF <- read.csv("path/to/your/data/directory/LUNAR_data.csv")
 VCF_tib <- as_tibble(VCF)
@@ -323,7 +323,7 @@ ggsave("patient_timepoint_grid_filtered.png", width = 14, height = 10, dpi = 300
 
 
 ###########################################################################################################
-# 2) Figure 9: Sampling timepoints for each Usual Care patient included in the final longitudinal analysis cohort
+# 2) Figure 10: Sampling timepoints for each Usual Care patient included in the final longitudinal analysis cohort
 ###########################################################################################################
 collapse_tp <- function(x) {
   case_when(
@@ -397,7 +397,7 @@ ggsave("patient_timepoint_grid_new.png", width = 14, height = 10, dpi = 300)
 
 
 ###########################################################################################################
-# 3) Figure 10: Comparison between sequencing quality control metrics for LUNAR and Usual Care
+# 3) Figure 11: Comparison between sequencing quality control metrics for LUNAR and Usual Care
 ###########################################################################################################
 sample_qc <- LUNAR_UC_trajectory_analysis_cohort %>%
   distinct(
