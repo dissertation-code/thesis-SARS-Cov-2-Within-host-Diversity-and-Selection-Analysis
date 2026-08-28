@@ -6,10 +6,10 @@
 # 3) Gene-specific nuceleotide diversity (π gene) (LUNAR only)
 
 ## Includes figures:
-# 1) Figure 13: Comparison of variant burden (number of variants per sample per timepoint) in LUNAR and Usual Care after sotrovimab/standard-of-care administration
-# 2) Figure 14: Proportional distribution of variants across genes at Day 14 in LUNAR and Usual Care
-# 3) Figure 15: Within-host per-site nucleotide diversity (πsite) trajectory for each patient in the final LUNAR cohort
-# 4) Figure 16: Gene-specific nucleotide diversity for patients in the final LUNAR cohort
+# 1) Figure 14: Comparison of variant burden (number of variants per sample per timepoint) in LUNAR and Usual Care after sotrovimab/standard-of-care administration
+# 2) Figure 15: Proportional distribution of variants across genes at Day 14 in LUNAR and Usual Care
+# 3) Figure 16: Within-host per-site nucleotide diversity (πsite) trajectory for each patient in the final LUNAR cohort
+# 4) Figure 17: Gene-specific nucleotide diversity for patients in the final LUNAR cohort
 
 
 
@@ -22,7 +22,7 @@ library(ggpubr)
 
 ################################################################################
 ######## 1) Mutation burden per sample per timepoint 
-############# Figure 13 & 14 
+############# Figure 14 & 15 
 ################################################################################
 # Load the LUNAR + UC longitudinal analysis cohort (refer 01_QC_and_analysis_cohort_building.R)
 LUNAR_UC_trajectory_analysis_cohort <- read.csv("path/to/your/data/directory/LUNAR_UC_trajectory_analysis_cohort.csv")
@@ -65,7 +65,7 @@ wilcox.test(n_variants ~ Cohort,
             data = Day14_p_data,
             exact = FALSE)
 
-######## Figure 13. Comparison of variant burden (number of variants per sample per timepoint) in LUNAR and Usual Care  #########
+######## Figure 14. Comparison of variant burden (number of variants per sample per timepoint) in LUNAR and Usual Care  #########
 ggplot() +
   # Individual patient trajectories
   geom_line(
@@ -113,7 +113,7 @@ ggplot() +
     subtitle = "Thick coloured lines show the cohort median"
   )
 
-########### Figure 14. Proportional distribution of variants across genes at Day 14 in LUNAR and Usual Care #################
+########### Figure 15. Proportional distribution of variants across genes at Day 14 in LUNAR and Usual Care #################
 cohort_gene_counts <- LUNAR_UC_trajectory_analysis_cohort %>% filter(Filter_SendRef == "DAY14") %>%
   group_by(Cohort, GENE_f) %>%
   summarise(
@@ -155,7 +155,7 @@ ggplot(cohort_gene_props,
 
 ################################################################################
 ######## 2) Within-host per-site nucleotide diversity (π site)  
-############# Figure 15
+############# Figure 16
 ################################################################################
 
 # Loading only LUNAR longitudinal analysis cohort 
@@ -193,7 +193,7 @@ pi_sample <- pi_sample %>%
   )
 
 
-########### Figure 15. Within-host per-site nucleotide diversity (πsite) trajectory for each patient in the final LUNAR cohort ##############
+########### Figure 16. Within-host per-site nucleotide diversity (πsite) trajectory for each patient in the final LUNAR cohort ##############
 pi_sample <- pi_sample %>%
   mutate(
     Filter_SendRef = factor(
@@ -244,7 +244,7 @@ ggplot() +
 
 ################################################################################
 ######## 3) Gene-specific nucleotide diversity (π gene)  
-############# Figure 16
+############# Figure 17
 ################################################################################
 
 pi_gene <- df_snps %>%
@@ -332,7 +332,7 @@ gene_time_pi <- gene_time_pi %>%
   )
 
 
-################ Figure 16: Gene-specific nucleotide diversity for patients in the final LUNAR cohort ##########################
+################ Figure 17: Gene-specific nucleotide diversity for patients in the final LUNAR cohort ##########################
 ggplot(
   gene_time_pi,
   aes(
