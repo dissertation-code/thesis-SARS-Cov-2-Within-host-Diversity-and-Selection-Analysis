@@ -6,9 +6,9 @@
 # 3) Viral load trajectory comparison between patients with escape and non-escape mutations (LUNAR only)
 
 ## Includes figures:
-# 1) Figure 12: Comparison of viral load between LUNAR and Usual Care
-# 2) Figure 25: Viral load persistence by presence of sotrovimab-associated mutation
-# 3) Figure 26: Viral load trajectory by sotrovimab-escape mutation status 
+# 1) Figure 13: Comparison of viral load between LUNAR and Usual Care
+# 2) Figure 26: Viral load persistence by presence of sotrovimab-associated mutation
+# 3) Figure 27: Viral load trajectory by sotrovimab-escape mutation status 
 
 # Load packages 
 library(tidyverse)
@@ -83,7 +83,7 @@ pvals <- pvals %>%
   mutate(label = paste0("Day ", Day, ": p = ", signif(p_adj, 2)))
 
 
-############## Figure 12: Comparison of viral load between LUNAR and Usual Care ####################### 
+############## Figure 13: Comparison of viral load between LUNAR and Usual Care ####################### 
 ggplot() +
   # Individual patient trajectories
   geom_line(
@@ -189,7 +189,7 @@ p_lab <- paste0("p = ",
 # Position for label
 y_pos <- max(patient_duration$last_day, na.rm = TRUE) * 1.08
 
-########### Figure 25: Viral load persistence by presence of sotrovimab-associated mutation #################
+########### Figure 26: Viral load persistence by presence of sotrovimab-associated mutation #################
 ggplot(patient_duration,
        aes(x = drug_mutation_patient,
            y = last_day,
@@ -251,7 +251,7 @@ pvals_drug <- vl_plot_data %>%
     y.position = max(vl_plot_data$Log10_VL, na.rm = TRUE) + 0.4
   )
 
-############# Figure 26: Viral load trajectory by sotrovimab-escape mutation status #####################
+############# Figure 27: Viral load trajectory by sotrovimab-escape mutation status #####################
 ggplot(VCF_tib %>% filter(!is.na(Filter_SendRef)),
        aes(Filter_SendRef,
            Log10_VL,
